@@ -22,6 +22,7 @@ $roots_includes = array(
   'lib/comments.php',        // Custom comments modifications
   'lib/scripts.php',         // Scripts and stylesheets
   'lib/shortcode.php',       // Custom Shortcodes
+  'lib/metabox.php',         // Custom functions
   'lib/extras.php',          // Custom functions
 );
 

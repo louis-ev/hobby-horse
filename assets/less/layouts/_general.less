@@ -9,20 +9,55 @@
 .main { }
 
 
+
 .home .main {
 
 	display: flex;
 
 	.colonne {
 
+		flex:1;
+		position: relative;
+		min-height: 100vh;
+		transition: all .2s ease-out;
+
+		&:hover {
+			flex:1.2;
+			transition: all .2s ease-out;
+		}
+
 		.langue {
 			.h3;
 			font-weight: bold;
 			text-transform: uppercase;
-
 		}
 
-		flex:1;
+		.apercu {
+			min-height: 55px;
+			position: absolute;
+			padding-bottom: 1rem;
+			transition: padding .2s ease-out, margin .2s ease-out;
+
+			&:hover {
+				background-color: #fff;
+				z-index: 100;
+			}
+
+			.chapitre-title {
+				.h4;
+			}
+		}
+
+		@iterations: 10;
+		.chapitre-loop (@i) when (@i > 0) {
+		    .chapitre@{i} {
+		        top: percentage(( @i*10 + 2 )/100);
+		    }
+
+			.chapitre-loop(@i - 1);
+		}
+		.chapitre-loop(@iterations);
+
 	}
 
 	.entry-title {

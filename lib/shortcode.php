@@ -39,7 +39,8 @@ function colonne_langue( $atts ){
 						    'field' => 'slug',
 				        )
 				    ),
-					'order' => 'ASC'
+					'order' => 'ASC',
+					'orderBy' => 'hobby_horse_radio',
 				);
 
 				//  assigning variables to the loop
@@ -47,7 +48,18 @@ function colonne_langue( $atts ){
 
 				// The Loop
 				while ($wp_query->have_posts()) : $wp_query->the_post();
-					get_template_part('templates/content');
+				?>
+					<?php
+						$chapitre = (string) rwmb_meta( 'hobby_horse_radio' );
+					?>
+					<article class='apercu <?php echo "chapitre".$chapitre ?>' data-chapitre=<?php echo $chapitre; ?>>
+					  <header>
+					    <h2 class="chapitre-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+<!-- 						<?php echo rwmb_meta( 'hobby_horse_text' ); ?> -->
+					  </header>
+					</article>
+
+				<?php
 				endwhile;
 
 				wp_reset_postdata();
