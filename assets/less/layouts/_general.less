@@ -1,4 +1,4 @@
-
+@spacer: 10px;
 
 .banner { }
 
@@ -68,6 +68,66 @@
 
 
 
+}
+
+.page-template-template-article-langue-head-php .main {
+
+	width: 70%;
+	max-width: 1024px;
+	margin: auto;
+
+	.chapter {
+
+		position: relative;
+		margin-bottom: @spacer*8;
+
+
+		.lang-list {
+			list-style: none;
+			text-transform: uppercase;
+			padding:0;
+			margin: 0;
+
+			a {
+				cursor: pointer;
+			}
+
+			.exists {
+				font-weight: bold;
+			}
+
+			.active li {
+				background-color: #333;
+				color: #fff;
+			}
+
+			li {
+				display: inline-block;
+				padding: 0;
+				margin-right: @spacer;
+			}
+		}
+
+		.article_container {
+			position: relative;
+		}
+
+		article {
+			height:auto;
+			position: absolute;
+			top:0;
+			width: 100%;
+			opacity: 0;
+			transition: opacity 1s ease-out;
+
+			&.active {
+				opacity: 1;
+				z-index: 1;
+			}
+
+		}
+
+	}
 }
 
 

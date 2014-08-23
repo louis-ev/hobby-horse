@@ -39,8 +39,7 @@ function colonne_langue( $atts ){
 						    'field' => 'slug',
 				        )
 				    ),
-					'order' => 'ASC',
-					'orderBy' => 'hobby_horse_radio',
+					'order' => 'ASC'
 				);
 
 				//  assigning variables to the loop

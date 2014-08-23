@@ -44,7 +44,6 @@ add_filter( 'show_admin_bar', '__return_false' );
 
 // dans les posts, enlever les colonnes inutiles
 function gestion_colonnes( $columns ) {
-  unset($columns['tags']);
   unset($columns['categories']);
   unset($columns['comments']);
   return $columns;
@@ -59,7 +58,6 @@ add_action( 'admin_init' , 'column_init' );
 function my_remove_menu_items() {
 	remove_menu_page('edit-comments.php');
 	remove_submenu_page( 'edit.php', 'edit-tags.php?taxonomy=category' );
-	remove_submenu_page( 'edit.php', 'edit-tags.php?taxonomy=post_tag' );
 }
 add_action( 'admin_menu', 'my_remove_menu_items' );
 

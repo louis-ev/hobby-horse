@@ -31,10 +31,45 @@ var Roots = {
       // JavaScript to be fired on the home page
     }
   },
-  // About us page, note the change from about-us to about_us.
-  about_us: {
+
+  page_template_template_article_langue_head_php: {
     init: function() {
-      // JavaScript to be fired on the about us page
+
+		$(".main section").each(function() {
+			$this = $(this);
+
+			var largest_article_height = 0;
+
+			$this.find("article").each( function() {
+				$that = $(this);
+				lang = $that.data("lang");
+				$this.find(".lang-list a[data-lang=" + lang + "]").addClass("exists");
+
+				if ( $that.height() > largest_article_height ) {
+					largest_article_height = $that.height();
+				}
+			});
+
+			console.log( '$this.find("> header").height() : ' + $this.find("> header").height() + ' $this.find("> lang-list").height() : ' + $this.find("> lang-list").height() + ' largest_article_height : ' + largest_article_height);
+			$this.height( $this.find("> header").height() + $this.find("> lang-list").height() + largest_article_height );
+
+		});
+		$(".main article").eq(0).addClass("active");
+
+
+		$(".lang-list a").on("mouseover", function() {
+			var link_lang = $(this).data("lang");
+			var $this_chapter = $(this).closest(".chapter");
+
+			$this_chapter.find(".lang-list a").removeClass("active");
+			$(this).addClass("active");
+
+			$this_chapter.find("article").removeClass("active");
+			$this_chapter.find("article[data-lang=" + link_lang + "]").addClass("active");
+
+			console.log("mouseover lang : " + link_lang + " article-header : " + $this_chapter.find("article[data-lang=" + link_lang + "] .entry-title").text() );
+
+		});
     }
   }
 };
