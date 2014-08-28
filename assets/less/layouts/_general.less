@@ -64,53 +64,65 @@
 		.h5;
 	}
 
-
-
-
-
 }
 
-.page-template-template-article-langue-head-php .main {
+// page cartographie
+.cartographie {
+	width: 5000px;
+	height: 5000px;
+}
 
-	width: 70%;
-	max-width: 1024px;
-	margin: auto;
+.tableau {
+	position: absolute;
+	width: 1024px;
+	height: 1024px;
+	overflow-x: hidden;
+	overflow-y: auto;
 
-	.chapter {
+	border: 1px solid black;
 
+	.tableau-cont {
+		width: 100%;
+		padding: @spacer*2;
+	}
+}
+
+.chapter {
+
+	position: relative;
+	margin-bottom: @spacer*8;
+	width: 100%;
+
+	.lang-list {
+		list-style: none;
+		text-transform: uppercase;
+		padding:0;
+		margin: 0;
+
+		a {
+			cursor: pointer;
+		}
+
+		.exists {
+			font-weight: bold;
+		}
+
+		.active li {
+			background-color: #333;
+			color: #fff;
+			padding: @spacer / 2;
+		}
+
+		li {
+			display: inline-block;
+			padding: 0;
+			margin-right: @spacer;
+		}
+	}
+
+	.article_container {
 		position: relative;
-		margin-bottom: @spacer*8;
-
-
-		.lang-list {
-			list-style: none;
-			text-transform: uppercase;
-			padding:0;
-			margin: 0;
-
-			a {
-				cursor: pointer;
-			}
-
-			.exists {
-				font-weight: bold;
-			}
-
-			.active li {
-				background-color: #333;
-				color: #fff;
-			}
-
-			li {
-				display: inline-block;
-				padding: 0;
-				margin-right: @spacer;
-			}
-		}
-
-		.article_container {
-			position: relative;
-		}
+	}
 
 		article {
 			height:auto;
@@ -127,7 +139,15 @@
 
 		}
 
-	}
+}
+
+
+.page-template-template-article-langue-head-php .main {
+
+	width: 70%;
+	max-width: 1024px;
+	margin: auto;
+
 }
 
 

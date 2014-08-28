@@ -2,6 +2,7 @@
 
 /**
  * array liste langue sur page d'accueil
+ * [colonne-langue langue="fr, en, ru, es, ja, de, ko, pt, zh, ar, he, hi"]
  */
 
 function colonne_langue( $atts ){
@@ -49,7 +50,7 @@ function colonne_langue( $atts ){
 				while ($wp_query->have_posts()) : $wp_query->the_post();
 				?>
 					<?php
-						$chapitre = (string) rwmb_meta( 'hobby_horse_radio' );
+						$chapitre = (string) rwmb_meta( 'hobby_horse_chapter' );
 					?>
 					<article class='apercu <?php echo "chapitre".$chapitre ?>' data-chapitre=<?php echo $chapitre; ?>>
 					  <header>
@@ -74,4 +75,113 @@ function colonne_langue( $atts ){
 }
 add_shortcode( 'colonne-langue', 'colonne_langue' );
 
+/**
+ * appel de chapitre et toutes les langues associées
+ * [afficher-article chapitre="8"]
+ */
+
+function afficher_article( $atts ){
+
+	extract( shortcode_atts( array(
+		'chapitre' => '',
+		'partie' => '',
+		'posx' => '1200',
+		'posy' => '800',
+	), $atts, 'afficher-article' ) );
+
+	ob_start();
+
+/*
+		$loop = new WP_Query(
+			array(
+				'post_type' => 'post',
+				'posts_per_page' => -1,
+				'meta_key' => 'hobby_horse_chapter',
+				'meta_value' => $chapitre
+			)
+		);
+*/
+
+		 $args = array(
+			'post_type' => 'post',
+			'posts_per_page' => -1,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key' => 'hobby_horse_chapter',
+					'value' => $chapitre,
+				),
+				array(
+					'key' => 'hobby_horse_part',
+					'value' => $partie,
+				),
+			)
+		);
+
+		$loop = new WP_Query( $args );
+
+		if ( $loop->have_posts() ) {
+			$hasPosts = true; $first = true;
+
+	  		?>
+
+			<section class="tableau" style="left : <?php echo $posx . 'px'; ?>; top : <?php echo $posy . 'px'; ?>;">
+
+				<div class="tableau-cont chapter" data-chapter='<?php echo $chapitre; ?>' data-part='<?php echo $partie; ?>' >
+					<?php
+
+					$out = array();
+
+					$taxonomy_slug = 'lang';
+			        $terms = get_terms( $taxonomy_slug );
+
+					$out[] = "<header><h4>Chapitre ".$chapitre."</h4><h4>Partie ".$partie."</h4></header>\n<ul class='lang-list'>";
+					foreach ( $terms as $term ) {
+					$out[] =
+					  '  <a data-lang="'
+					.    $term->slug.'" data-langfull="'
+					.    $term->name.'"><li><abbr title="'
+					.    $term->name.'">'
+					.    $term->slug
+					. "</abbr></li></a>\n";
+					}
+					$out[] = "</ul>\n";
+
+					echo implode('', $out );
+
+					echo "<div class='article_container'>";
+
+					while ( $loop->have_posts() ) : $loop->the_post();
+
+			            $terms = get_the_terms( get_the_ID(),'lang' );
+
+						?>
+
+					  <article <?php post_class(); ?> data-lang='<?php foreach( $terms as $term ) { echo $term->slug; } ?>' >
+					    <header>
+					      <h1 class="entry-title"><?php the_title(); ?></h1>
+						  <?php //get_template_part('templates/entry-meta'); ?>
+					    </header>
+					    <div class="entry-content">
+					      <?php the_content(); ?>
+					    </div>
+					  </article>
+
+					<?php
+					endwhile;// posts
+					?>
+
+					</div>
+				</div>
+			</section>
+
+		<?php
+		}
+
+		wp_reset_postdata();
+
+	return ob_get_clean();
+
+}
+add_shortcode( 'afficher-article', 'afficher_article' );
 

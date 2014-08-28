@@ -31,7 +31,8 @@ for($i = 1; $i <= 9; $i++){
 			foreach ( $terms as $term ) {
 			$out[] =
 			  '  <a data-lang="'
-			.    $term->slug.'"><li>'
+			.    $term->slug.'" data-langfull="'
+			.    $term->name.'"><li>'
 			.    $term->slug
 			. "</li></a>\n";
 			}

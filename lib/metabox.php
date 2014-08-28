@@ -58,7 +58,7 @@ function hobby_horse_register_meta_boxes( $meta_boxes )
 			// Chapitre
 			array(
 				'name'     => __( 'Chapitre', 'rwmb' ),
-				'id'       => "{$prefix}radio",
+				'id'       => "{$prefix}chapter",
 				'type'     => 'radio',
 				// Array of 'value' => 'Label' pairs for select box
 				'options'  => array(
@@ -72,6 +72,14 @@ function hobby_horse_register_meta_boxes( $meta_boxes )
 					'8' => __( '8', 'rwmb' ),
 					'9' => __( '9', 'rwmb' ),
 				),
+			),
+			// Partie
+			array(
+				'name'     => __( 'Partie', 'rwmb' ),
+				'id'       => "{$prefix}part",
+				'type' => 'number',
+				'min'  => 0,
+				'step' => 1,
 			),
 		),
 		'validation' => array(

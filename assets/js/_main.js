@@ -22,20 +22,8 @@ var Roots = {
   // All pages
   common: {
     init: function() {
-      // JavaScript to be fired on all pages
-    }
-  },
-  // Home page
-  home: {
-    init: function() {
-      // JavaScript to be fired on the home page
-    }
-  },
 
-  page_template_template_article_langue_head_php: {
-    init: function() {
-
-		$(".main section").each(function() {
+		$(".chapter").each(function() {
 			$this = $(this);
 
 			var largest_article_height = 0;
@@ -54,22 +42,28 @@ var Roots = {
 			$this.height( $this.find("> header").height() + $this.find("> lang-list").height() + largest_article_height );
 
 		});
-		$(".main article").eq(0).addClass("active");
 
-
-		$(".lang-list a").on("mouseover", function() {
-			var link_lang = $(this).data("lang");
-			var $this_chapter = $(this).closest(".chapter");
-
-			$this_chapter.find(".lang-list a").removeClass("active");
-			$(this).addClass("active");
-
-			$this_chapter.find("article").removeClass("active");
-			$this_chapter.find("article[data-lang=" + link_lang + "]").addClass("active");
-
-			console.log("mouseover lang : " + link_lang + " article-header : " + $this_chapter.find("article[data-lang=" + link_lang + "] .entry-title").text() );
-
+		$(".chapter .lang-list a.exists").on("mouseover", function() {
+			active_Translation ( $(this) );
 		});
+
+		$(".chapter .lang-list").each(function() {
+			active_Translation( $(this).find("a.exists").eq(0) );
+		});
+
+    }
+  },
+  // Home page
+  home: {
+    init: function() {
+      // JavaScript to be fired on the home page
+    }
+  },
+
+  page_template_template_article_langue_head_php: {
+    init: function() {
+
+
     }
   }
 };
