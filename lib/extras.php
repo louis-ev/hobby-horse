@@ -28,7 +28,7 @@ add_filter('wp_title', 'roots_wp_title', 10);
 function langue_init() {
 	register_taxonomy(
 		'lang',
-		'post',
+		array('post', 'wwhww'),
 		array(
 			'label' => __( 'Langue' ),
 			'hierarchical' => true,
@@ -66,3 +66,16 @@ function google_font(){
 	echo "<link href='http://fonts.googleapis.com/css?family=Noto+Sans|Noto+Sans:bold' rel='stylesheet' type='text/css'>","\n";
 }
 add_action( 'wp_enqueue_scripts', 'google_font');
+
+// ajouter le post type éléments du menu
+add_action( 'init', 'create_post_type' );
+function create_post_type() {
+  register_post_type( 'wwhww',
+    array(
+      'labels' => array(
+        'name' => __( 'What Who How Where When' )
+      ),
+      'public' => true,
+    )
+  );
+}

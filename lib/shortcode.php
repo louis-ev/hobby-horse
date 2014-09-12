@@ -185,3 +185,136 @@ function afficher_article( $atts ){
 }
 add_shortcode( 'afficher-article', 'afficher_article' );
 
+
+
+
+
+
+/**
+ * appel du menu du haut : what who how where when
+ * [top-menu wwhww="what, who"]
+ */
+
+function top_menu( $atts ){
+
+	extract( shortcode_atts( array(
+		'wwhww' => 'what, who, how, where, when',
+	), $atts, 'top-menu' ) );
+
+//	echo '$wwhww : ' . $wwhww;
+
+	$wwhww = explode( ', ', $wwhww );
+
+	ob_start();
+
+/*
+		$loop = new WP_Query(
+			array(
+				'post_type' => 'post',
+				'posts_per_page' => -1,
+				'meta_key' => 'hobby_horse_chapter',
+				'meta_value' => $chapitre
+			)
+		);
+*/
+
+
+
+		$out = array();
+
+		$out[] = "<div class='sommaire'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></div>";
+
+
+		$taxonomy_slug = 'lang';
+        $terms = get_terms( $taxonomy_slug );
+
+		$out[] = "<ul class='lang-list'>";
+
+		foreach ( $terms as $term ) {
+			$out[] =
+			  '  <a data-lang="'
+			.    $term->slug.'" data-langfull="'
+			.    $term->name.'"><li><abbr title="'
+			.    $term->name.'">'
+			.    $term->slug
+			. "</abbr></li></a>\n";
+		}
+		$out[] = "</ul>\n";
+
+		echo implode('', $out );
+
+		?>
+
+		<ul class="wwhww-list">
+
+			<?php
+			for($i = 0; $i < count($wwhww); $i++) {
+
+				 $args = array(
+					'post_type' => 'wwhww',
+					'posts_per_page' => -1,
+					'meta_query' => array(
+						array(
+							'key' => 'hobby_horse_wwhww',
+							'value' => $wwhww[$i],
+						),
+					)
+				);
+
+				$loop = new WP_Query( $args );
+
+
+				if ( $loop->have_posts() ) {
+					$hasPosts = true; $first = true;
+			  		?>
+
+			  		<li class="wwhww-items <?php echo $wwhww[$i]; ?>">
+
+			  			<h3><?php echo $wwhww[$i]; ?></h3>
+
+						<?php
+
+						$out = array();
+						?>
+
+						<div class='wwhww-container'>
+
+							<?php
+							while ( $loop->have_posts() ) : $loop->the_post();
+
+					            $terms = get_the_terms( get_the_ID(),'lang' );
+
+								?>
+
+							  <section <?php post_class(); ?> data-lang='<?php foreach( $terms as $term ) { echo $term->slug; } ?>' >
+							    <header>
+							      <h4 class="entry-title"><?php the_title(); ?></h4>
+								  <?php //get_template_part('templates/entry-meta'); ?>
+							    </header>
+							    <div class="entry-content">
+							      <?php the_content(); ?>
+							    </div>
+							  </section>
+
+							<?php
+							endwhile;// posts
+							?>
+
+						</div>
+					</li>
+
+				<?php
+				}
+			}
+		?>
+
+		</ul>
+
+		<?php
+		wp_reset_postdata();
+
+	return ob_get_clean();
+
+}
+add_shortcode( 'top-menu', 'top_menu' );
+

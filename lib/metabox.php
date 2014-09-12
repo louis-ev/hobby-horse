@@ -99,6 +99,38 @@ function hobby_horse_register_meta_boxes( $meta_boxes )
 		)
 	);
 
+	// 2nd meta box
+	$meta_boxes[] = array(
+		// Meta box title - Will appear at the drag and drop handle bar. Required.
+		'title' => __( 'Hobby Horse', 'rwmb' ),
+
+		// Post types, accept custom post types as well - DEFAULT is array('post'). Optional.
+		'pages' => array( 'wwhww'),
+
+		// Where the meta box appear: normal (default), advanced, side. Optional.
+		'context' => 'normal',
+
+		// Order of meta box: high (default), low. Optional.
+		'priority' => 'high',
+
+		'fields' => array(
+			// Chapitre
+			array(
+				'name'     => __( 'wwhww', 'rwmb' ),
+				'id'       => "{$prefix}wwhww",
+				'type'     => 'radio',
+				// Array of 'value' => 'Label' pairs for select box
+				'options'  => array(
+					'who' => __( 'Who', 'rwmb' ),
+					'what' => __( 'What', 'rwmb' ),
+					'how' => __( 'How', 'rwmb' ),
+					'when' => __( 'When', 'rwmb' ),
+					'where' => __( 'Where', 'rwmb' ),
+				),
+			),
+		),
+	);
+
 	return $meta_boxes;
 }
 
