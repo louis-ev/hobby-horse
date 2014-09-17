@@ -23,6 +23,11 @@ var Roots = {
   common: {
     init: function() {
 
+		// événements navbar
+		navbar_events();
+
+
+		// traduction d'articles
 		$(".chapter").each(function() {
 			$this = $(this);
 

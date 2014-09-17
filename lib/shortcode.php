@@ -222,13 +222,59 @@ function top_menu( $atts ){
 
 		$out = array();
 
-		$out[] = "<div class='sommaire'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></div>";
+		$out[] = "<div class='sommaire inline-buttons'>";
 
+		// générer le sommaire
+		$out[] = "<ul class='sommaire--content'>";
+		// pour chaque chapitre de 1 à 9
+		for($i = 0; $i <= 9; $i++) {
+			// pour chaque partie de 1 à 10
+			for($j = 0; $j <= 10; $j++) {
+
+				$args = array(
+					'post_type' => 'post',
+					'posts_per_page' => -1,
+					'meta_query' => array(
+						'relation' => 'AND',
+						array(
+							'key' => 'hobby_horse_chapter',
+							'value' => $i,
+						),
+						array(
+							'key' => 'hobby_horse_part',
+							'value' => $j,
+						),
+					)
+				);
+
+				$loop = new WP_Query( $args );
+
+				if ( $loop->have_posts() ) {
+					$hasPosts = true; $first = true;
+
+					$out[] = "<li><header><h4>Chapitre ".$i."</h4><h4>Partie ".$j."</h4></header>";
+					$out[] = "<ul>";
+
+					while ( $loop->have_posts() ) : $loop->the_post();
+						$out[] = "<li><header><h3 class='entry-title'>". get_the_title() . "</h3></header></li>";
+					endwhile;// posts
+
+					$out[] = "</ul>";
+					$out[] = "</li>";
+				}
+			}
+		}
+
+		$out[] = "</ul>";
+
+		$out[] = "<button class='btn sommaire--boutton'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></button>";
+
+		$out[] = "</div>";
 
 		$taxonomy_slug = 'lang';
         $terms = get_terms( $taxonomy_slug );
 
-		$out[] = "<ul class='lang-list'>";
+		$out[] = "<ul class='lang-list inline-buttons'>";
 
 		foreach ( $terms as $term ) {
 			$out[] =
@@ -245,7 +291,7 @@ function top_menu( $atts ){
 
 		?>
 
-		<ul class="wwhww-list">
+		<ul class="wwhww-list inline-buttons">
 
 			<?php
 			for($i = 0; $i < count($wwhww); $i++) {

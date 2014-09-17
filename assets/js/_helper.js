@@ -20,3 +20,62 @@ function active_Translation( $lang_list_a ) {
 
 
 }
+
+/*
+ * navbar
+ */
+
+function navbar_events() {
+
+	$(".banner").on({
+		mouseover: function(e) {
+
+			var $target = $(e.target);
+
+			console.log( $target.parents(".sommaire").length );
+
+			$(".navbar-container").addClass("is-active");
+
+			if ( $target.parents(".sommaire").length > 0 ) {
+				$(".sommaire").addClass("is-active");
+
+			}
+
+
+		},
+		mouseleave: function(e) {
+			$(".navbar-container").removeClass("is-active");
+
+
+			if ( $target.parents(".sommaire").length > 0 ) {
+				$(".sommaire").removeClass("is-active");
+
+			}
+
+		},
+
+/*
+
+			background-color:#fff;
+			max-height:650px;
+
+		+ .wrap {
+			background-color: rgba(41,41,41,.4);
+		}
+*/
+
+		click: function (e) {
+
+
+
+
+		},
+
+	});
+
+
+
+
+
+
+}
