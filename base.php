@@ -12,8 +12,8 @@
     get_template_part('templates/header');
   ?>
 
-  <div class="wrap" role="document">
-    <div class="content">
+  <div id="viewport" class="wrap" role="document">
+    <div id="base" class="content dragger">
       <main class="main" role="main">
         <?php include roots_template_path(); ?>
       </main><!-- /.main -->

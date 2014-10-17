@@ -87,6 +87,9 @@ function afficher_article( $atts ){
 		'partie' => '',
 		'posx' => '1200',
 		'posy' => '800',
+		'largeur' => '800',
+		'hauteur' => '600',
+		'langueParDefaut' => 'fr',
 	), $atts, 'afficher-article' ) );
 
 	ob_start();
@@ -125,7 +128,7 @@ function afficher_article( $atts ){
 
 	  		?>
 
-			<section class="tableau" style="left : <?php echo $posx . 'px'; ?>; top : <?php echo $posy . 'px'; ?>;">
+			<section class="tableau dragger" style="left : <?php echo $posx . 'px'; ?>; top : <?php echo $posy . 'px'; ?>; width: <?php echo $largeur . 'px'; ?>; height: <?php echo $hauteur . 'px'; ?>; ">
 
 				<div class="tableau-cont chapter" data-chapter='<?php echo $chapitre; ?>' data-part='<?php echo $partie; ?>' >
 					<?php
@@ -163,7 +166,16 @@ function afficher_article( $atts ){
 						  <?php //get_template_part('templates/entry-meta'); ?>
 					    </header>
 					    <div class="entry-content">
-					      <?php the_content(); ?>
+					      <?php
+
+						      $the_extract = rwmb_meta( 'hobby_horse_extract' );
+
+						      if ( $the_extract ) {
+							      echo $the_extract;
+						      } else {
+							      the_content();
+						      }
+					      ?>
 					    </div>
 					  </article>
 
@@ -225,10 +237,12 @@ function top_menu( $atts ){
 		$out[] = "<div class='sommaire inline-buttons'>";
 
 		// générer le sommaire
-		$out[] = "<ul class='sommaire--content'>";
+		$out[] = "<ul class='sommaire--content'><h3 class='title'>Sommaire</h3>";
 		// pour chaque chapitre de 1 à 9
 		for($i = 0; $i <= 9; $i++) {
 			// pour chaque partie de 1 à 10
+			$out[] = "<li><h4 class='chapter'>Chapitre ".$i."</h4>";
+
 			for($j = 0; $j <= 10; $j++) {
 
 				$args = array(
@@ -249,20 +263,27 @@ function top_menu( $atts ){
 
 				$loop = new WP_Query( $args );
 
+				$chapitre = $i;
+
 				if ( $loop->have_posts() ) {
 					$hasPosts = true; $first = true;
+					$partie = $j;
 
-					$out[] = "<li><header><h4>Chapitre ".$i."</h4><h4>Partie ".$j."</h4></header>";
-					$out[] = "<ul>";
+					$out[] = "<h4 class='part'  data-chapter=". $chapitre." data-part=". $partie .">Partie ".$partie."</h4>";
+					$out[] = "<ul class='part' data-chapter=". $chapitre." data-part=". $partie.">";
 
 					while ( $loop->have_posts() ) : $loop->the_post();
-						$out[] = "<li><header><h3 class='entry-title'>". get_the_title() . "</h3></header></li>";
+
+						$the_lang = array_pop(get_the_terms( get_the_ID(), 'lang' ));
+						$the_lang_slug = $the_lang->slug;
+
+						$out[] = "<li class='title'  data-chapter=". $chapitre." data-part=". $partie." data-lang='". $the_lang_slug ."'>". get_the_title() . "</li>";
 					endwhile;// posts
 
 					$out[] = "</ul>";
-					$out[] = "</li>";
 				}
 			}
+			$out[] = "</li>";
 		}
 
 		$out[] = "</ul>";

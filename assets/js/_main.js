@@ -26,9 +26,9 @@ var Roots = {
 		// événements navbar
 		navbar_events();
 
-
 		// traduction d'articles
-		$(".chapter").each(function() {
+		$(".tableau .chapter").each(function() {
+
 			$this = $(this);
 
 			var largest_article_height = 0;
@@ -38,21 +38,25 @@ var Roots = {
 				lang = $that.data("lang");
 				$this.find(".lang-list a[data-lang=" + lang + "]").addClass("exists");
 
+/*
 				if ( $that.height() > largest_article_height ) {
 					largest_article_height = $that.height();
 				}
+*/
 			});
 
+/*
 			console.log( '$this.find("> header").height() : ' + $this.find("> header").height() + ' $this.find("> lang-list").height() : ' + $this.find("> lang-list").height() + ' largest_article_height : ' + largest_article_height);
 			$this.height( $this.find("> header").height() + $this.find("> lang-list").height() + largest_article_height );
+*/
 
 		});
 
-		$(".chapter .lang-list a.exists").on("mouseover", function() {
+		$(".tableau .chapter .lang-list a.exists").on("click", function() {
 			active_Translation ( $(this) );
 		});
 
-		$(".chapter .lang-list").each(function() {
+		$(".tableau .chapter .lang-list").each(function() {
 			active_Translation( $(this).find("a.exists").eq(0) );
 		});
 
@@ -70,7 +74,16 @@ var Roots = {
 
 
     }
-  }
+  },
+
+  cartographie: {
+    init: function() {
+
+		$('#viewport').dragscrollable({dragSelector: '.dragger:first', acceptPropagatedEvent: true});
+
+    }
+  },
+
 };
 
 // The routing fires all common scripts, followed by the page specific scripts.

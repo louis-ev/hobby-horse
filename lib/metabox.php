@@ -81,6 +81,22 @@ function hobby_horse_register_meta_boxes( $meta_boxes )
 				'min'  => 0,
 				'step' => 1,
 			),
+			array(
+				'name' => __( 'Extrait en page d\'accueil', 'rwmb' ),
+				'id'   => "{$prefix}extract",
+				'type' => 'wysiwyg',
+				// Set the 'raw' parameter to TRUE to prevent data being passed through wpautop() on save
+				'raw'  => false,
+				'std'  => __( 'WYSIWYG default value', 'rwmb' ),
+
+				// Editor settings, see wp_editor() function: look4wp.com/wp_editor
+				'options' => array(
+					'textarea_rows' => 4,
+					'teeny'         => false,
+					'media_buttons' => true,
+				),
+			),
+
 		),
 		'validation' => array(
 			'rules' => array(
