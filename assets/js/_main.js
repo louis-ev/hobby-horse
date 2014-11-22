@@ -27,7 +27,7 @@ var Roots = {
 		navbar_events();
 
 		// traduction d'articles
-		$(".tableau .chapter").each(function() {
+		$(".tableau .tableau-cont").each(function() {
 
 			$this = $(this);
 
@@ -37,12 +37,6 @@ var Roots = {
 				$that = $(this);
 				lang = $that.data("lang");
 				$this.find(".lang-list a[data-lang=" + lang + "]").addClass("exists");
-
-/*
-				if ( $that.height() > largest_article_height ) {
-					largest_article_height = $that.height();
-				}
-*/
 			});
 
 /*
@@ -52,11 +46,11 @@ var Roots = {
 
 		});
 
-		$(".tableau .chapter .lang-list a.exists").on("click", function() {
+		$(".tableau .tableau-cont .lang-list a.exists").on("click", function() {
 			active_Translation ( $(this) );
 		});
 
-		$(".tableau .chapter .lang-list").each(function() {
+		$(".tableau .tableau-cont .lang-list").each(function() {
 			active_Translation( $(this).find("a.exists").eq(0) );
 		});
 
@@ -79,7 +73,26 @@ var Roots = {
   cartographie: {
     init: function() {
 
-		$('#viewport').dragscrollable({dragSelector: '.dragger:first', acceptPropagatedEvent: true});
+			$('#viewport').scrollTo(
+				$(".tableau-cont[data-wwhww=what]"),
+				{ offset: { top: -$("#viewport").height()/2 + 300, left: -$("#viewport").width()/2 + 400} },
+				{ easing: 'easeInOutQuint' }
+			);
+
+			$('#viewport').dragscrollable({dragSelector: '.dragger:first', acceptPropagatedEvent: true});
+
+			cssGridCreator();
+
+			$(document).bind('keydown', 'alt', function (evt){
+				$('body').toggleClass('css-grid');
+			});
+
+			drawLinks();
+
+			$(window).load(function() {
+				$('body').addClass("is-loaded");
+				$('.spinnerContainer').fadeOut(400, function() { /*$(this).remove();*/});
+			});
 
     }
   },

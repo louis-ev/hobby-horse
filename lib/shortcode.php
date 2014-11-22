@@ -85,10 +85,8 @@ function afficher_article( $atts ){
 	extract( shortcode_atts( array(
 		'chapitre' => '',
 		'partie' => '',
-		'posx' => '1200',
-		'posy' => '800',
-		'largeur' => '800',
-		'hauteur' => '600',
+		'colx' => '2',
+		'coly' => '2',
 		'langueParDefaut' => 'fr',
 	), $atts, 'afficher-article' ) );
 
@@ -126,11 +124,24 @@ function afficher_article( $atts ){
 		if ( $loop->have_posts() ) {
 			$hasPosts = true; $first = true;
 
-	  		?>
+			$posx = $colx * 100;
+			$posy = $coly * 100;
 
-			<section class="tableau dragger" style="left : <?php echo $posx . 'px'; ?>; top : <?php echo $posy . 'px'; ?>; width: <?php echo $largeur . 'px'; ?>; height: <?php echo $hauteur . 'px'; ?>; ">
+			while ( $loop->have_posts() ) : $loop->the_post();
+	      $categories = get_the_category( get_the_ID() );
+	      $out[] = "";
+				foreach ( $categories as $category ) {
+						$out[] = $category->slug;
+				}
+			endwhile;
 
-				<div class="tableau-cont chapter" data-chapter='<?php echo $chapitre; ?>' data-part='<?php echo $partie; ?>' >
+			$categories_unique = array_unique( $out, $sort_flags = SORT_STRING )
+
+	  ?>
+
+			<section class="tableau dragger" style="left : <?php echo $posx . 'px'; ?>; top : <?php echo $posy . 'px'; ?>;">
+
+				<div class="tableau-cont chapter" data-chapter='<?php echo $chapitre; ?>' data-part='<?php echo $partie; ?>'  data-categories='<?php echo implode(' ', $categories_unique ); ?>'>
 					<?php
 
 					$out = array();
@@ -140,13 +151,13 @@ function afficher_article( $atts ){
 
 					$out[] = "<header><h4>Chapitre ".$chapitre."</h4><h4>Partie ".$partie."</h4></header>\n<ul class='lang-list'>";
 					foreach ( $terms as $term ) {
-					$out[] =
-					  '  <a data-lang="'
-					.    $term->slug.'" data-langfull="'
-					.    $term->name.'"><li><abbr title="'
-					.    $term->name.'">'
-					.    $term->slug
-					. "</abbr></li></a>\n";
+						$out[] =
+						  '  <a data-lang="'
+						.    $term->slug.'" data-langfull="'
+						.    $term->name.'"><li><abbr title="'
+						.    $term->name.'">'
+						.    $term->slug
+						. "</abbr></li></a>\n";
 					}
 					$out[] = "</ul>\n";
 
@@ -197,8 +208,121 @@ function afficher_article( $atts ){
 }
 add_shortcode( 'afficher-article', 'afficher_article' );
 
+/***********************************************************************************************
+	afficher wwhww dans la page
+***********************************************************************************************/
 
+function afficher_wwhww( $atts ){
 
+	extract( shortcode_atts( array(
+		'wwhww' => 'what',
+		'colx' => '28',
+		'coly' => '18',
+		'langueParDefaut' => 'fr',
+	), $atts, 'afficher-article' ) );
+
+	ob_start();
+
+/*
+		$loop = new WP_Query(
+			array(
+				'post_type' => 'post',
+				'posts_per_page' => -1,
+				'meta_key' => 'hobby_horse_chapter',
+				'meta_value' => $chapitre
+			)
+		);
+*/
+
+		 $args = array(
+			'post_type' => 'wwhww',
+			'posts_per_page' => -1,
+			'meta_query' => array(
+				array(
+					'key' => 'hobby_horse_wwhww',
+					'value' => $wwhww,
+				),
+			)
+		);
+
+		$loop = new WP_Query( $args );
+
+		if ( $loop->have_posts() ) {
+			$hasPosts = true; $first = true;
+
+			$posx = $colx * 100;
+			$posy = $coly * 100;
+
+	  ?>
+
+			<section class="tableau dragger" style="left : <?php echo $posx . 'px'; ?>; top : <?php echo $posy . 'px'; ?>;">
+
+				<div class="tableau-cont wwhww" data-wwhww='<?php echo $wwhww; ?>'>
+					<?php
+
+					$out = array();
+
+					$taxonomy_slug = 'lang';
+			        $terms = get_terms( $taxonomy_slug );
+
+					$out[] = "<ul class='lang-list'>";
+					foreach ( $terms as $term ) {
+						$out[] =
+						  '  <a data-lang="'
+						.    $term->slug.'" data-langfull="'
+						.    $term->name.'"><li><abbr title="'
+						.    $term->name.'">'
+						.    $term->slug
+						. "</abbr></li></a>\n";
+					}
+					$out[] = "</ul>\n";
+
+					echo implode('', $out );
+
+					echo "<div class='article_container'>";
+
+					while ( $loop->have_posts() ) : $loop->the_post();
+
+			            $terms = get_the_terms( get_the_ID(),'lang' );
+
+						?>
+
+					  <article <?php post_class(); ?> data-lang='<?php foreach( $terms as $term ) { echo $term->slug; } ?>' >
+					    <header>
+					      <h1 class="entry-title"><?php the_title(); ?></h1>
+						  <?php //get_template_part('templates/entry-meta'); ?>
+					    </header>
+					    <div class="entry-content">
+					      <?php
+
+						      $the_extract = rwmb_meta( 'hobby_horse_extract' );
+
+						      if ( $the_extract ) {
+							      echo $the_extract;
+						      } else {
+							      the_content();
+						      }
+					      ?>
+					    </div>
+					  </article>
+
+					<?php
+					endwhile;// posts
+					?>
+
+					</div>
+				</div>
+			</section>
+
+		<?php
+		}
+
+		wp_reset_postdata();
+
+	return ob_get_clean();
+
+}
+add_shortcode( 'afficher-wwhww', 'afficher_wwhww' );
 
 
 
@@ -234,7 +358,7 @@ function top_menu( $atts ){
 
 		$out = array();
 
-		$out[] = "<div class='sommaire inline-buttons'>";
+		$out[] = "<div class='sommaire singleButton'>";
 
 		// générer le sommaire
 		$out[] = "<ul class='sommaire--content'><h3 class='title'>Sommaire</h3>";
@@ -292,6 +416,9 @@ function top_menu( $atts ){
 
 		$out[] = "</div>";
 
+		echo implode('', $out );
+
+/*
 		$taxonomy_slug = 'lang';
         $terms = get_terms( $taxonomy_slug );
 
@@ -309,9 +436,11 @@ function top_menu( $atts ){
 		$out[] = "</ul>\n";
 
 		echo implode('', $out );
+*/
 
 		?>
 
+<!--
 		<ul class="wwhww-list inline-buttons">
 
 			<?php
@@ -376,6 +505,7 @@ function top_menu( $atts ){
 		?>
 
 		</ul>
+-->
 
 		<?php
 		wp_reset_postdata();
